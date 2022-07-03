@@ -1,0 +1,53 @@
+Country,Ticker,Field,Desc,Main,Region,Type
+Agrentina ,MERVAL Index,PX_LAST,S&P MERVAL,Yes,Latam,Equity
+Agrentina ,IBG Index,PX_LAST,BYMA IBG Index,No,Latam,Equity
+Mexico ,MXPRL Index,PX_LAST,Bloomberg Mexico Index,No,Latam,Equity
+Mexico ,MEXBOL Index,PX_LAST,S&P/BMV IPC,Yes,Latam,Equity
+Mexico ,INMEX Index,PX_LAST,S&P/BMV Top 20,No,Latam,Equity
+Mexico ,FTBIVA Index,PX_LAST,FTSE Biva Index,No,Latam,Equity
+Mexico ,GTMXN10YR Corp,PX_LAST,Mexico 10-year,No,Latam,Rate
+Brazil ,BRPRL Index,PX_LAST,Bloomberg Brazil Index,Mo,Latam,Equity
+Brazil ,IBOV Index,PX_LAST,Brasil Sao Paulo SE,Yes,Latam,Equity
+Brazil ,IBX Index,PX_LAST,Brasil Sao Paulo SE top 100,No,Latam,Equity
+Brazil ,IGCX Index,PX_LAST,Coroporate Governance Index,No,Latam,Equity
+Brazil ,IVBX2 Index,PX_LAST,Second Line Index,No,Latam,Equity
+Brazil ,GTBRL10Y Govt,PX_LAST,Brazil 10-year,No,Latam,Rate
+Chile ,CLPL Index,PX_LAST,Bloomberg Chile Index,No,Latam,Equity
+Chile ,IPSA Index,PX_LAST,S&P/CLX IPSA Index,Yes,Latam,Equity
+Chile ,IGPA Index,PX_LAST,S&P/CLX IGPA Index,No,Latam,Equity
+Chile ,CHLRGCAP Index,PX_LAST,Large Cap,No,Latam,Equity
+Chile ,CHSMLCAP Index,PX_LAST,Small Cap,No,Latam,Equity
+Chile ,GTCLP10Y Govt,PX_LAST,Chile 10-year,No,Latam,Rate
+India,INL Index,PX_LAST,India Bloomberg Large & Mid Cap Index,No,APAC,Equity
+India,SENSEX Index,PX_LAST,SENSEX,Yes,APAC,Equity
+India,NIFTY 50 Index,PX_LAST,NIFTY 50,No,APAC,Equity
+India,NIFTYJR Index,PX_LAST,NIFTY Next 50,No,APAC,Equity
+India,NSE500 Index,PX_LAST,NIFTY 500,No,APAC,Equity
+India,GTINR10Y Govt,PX_LAST,India 10-year,No,APAC,Rate
+Korea,KRL Index,PX_LAST,Bloomberg Large & Mid Cap Index,No,APAC,Equity
+Korea,KOSPI Index,PX_LAST,KOSPI,Yes,APAC,Equity
+Korea,KOSPI2 Index,PX_LAST,KOSPI 200,No,APAC,Equity
+Korea,KOSDAQ Index,PX_LAST,KOSDAQ,No,APAC,Equity
+Korea,GTKRW10Y Govt,PX_LAST,Korea 10-year,No,APAC,Rate
+Indonesia,IDL Index,PX_LAST,Bloomberg Large & Mid Cap Index,No,APAC,Equity
+Indonesia,JCI Index,PX_LAST,JCI,Yes,APAC,Equity
+Indonesia,LQ45 Index,PX_LAST,LQ-45,No,APAC,Equity
+Indonesia,JAKISL Index,PX_LAST,JII,No,APAC,Equity
+Indonesia,GTIDR10Y Govt,PX_LAST,Indonesia 10-year,No,APAC,Rate
+Thailand,THL Index,PX_LAST,Bloomberg Large & Mid Cap Index,No,APAC,Equity
+Thailand,SET Index,PX_LAST,SET,Yes,APAC,Equity
+Thailand,SET50 Index,PX_LAST,SET 50,No,APAC,Equity
+Thailand,SETTHSI Index,PX_LAST,SETTHSI,No,APAC,Equity
+Thailand,GTTHB10Y Govt,PX_LAST,Thailand 10-year,No,APAC,Rate
+Russia,RUL Index,PX_LAST,Bloomberg Large & Mid Cap Index,Yes,EMEA,Equity
+Russia,MOEX Index ,PX_LAST,MOEX,No,EMEA,Equity
+Russia,RTSI$ Index,PX_LAST,RTS Index,No,EMEA,Equity
+Russia,GTRUB10Y Govt,PX_LAST,Russia 10-year,No,EMEA,Rate
+Turkey ,TRL Index,PX_LAST, Bloomberg Large & Mid Cap Index,Yes,EMEA,Equity
+Turkey,XU100,PX_LAST,Borsa Istanbul 100 ,No,EMEA,Equity
+Turkey,XU030 Index,PX_LAST,top 30 Index,No,EMEA,Equity
+Turkey,GTTRY9Y Govt,PX_LAST,10-year,No,EMEA,Rate
+South Africa,ZAL Index,PX_LAST,Bloomberg Large & Mid Cap Index,Yes,EMEA,Equity
+South Africa,TOP40 Index,PX_LAST,top 40 index,No,EMEA,Equity
+South Africa,JALSH Index,PX_LAST,FTSE All,No,EMEA,Equity
+South Africa,GTZAR10Y Govt,PX_LAST,South Africa 10-year,No,EMEA,Rate

@@ -1,0 +1,86 @@
+Type,Ticker,Field,Desc,Country,Region
+Data,BZPIIPCY Index,PX_LAST,Brazil CPI ,Brazil ,Latam 
+Data,BZGDYOY% Index,PX_LAST,Brazil GDP,Brazil ,Latam 
+Data,BRLFUNRT Index,PX_LAST,Brazil Unemployment ,Brazil ,Latam 
+Data,EHCABR Index,PX_LAST,Brazil Current Account ,Brazil ,Latam 
+Data,CNPINSYO Index,PX_LAST,Chile CPI ,Chile ,Latam 
+Data,CLGDPNA% Index,PX_LAST,Chile GDP,Chile ,Latam 
+Data,CHUETOTL Index,PX_LAST,Chile Unemployment ,Chile ,Latam 
+Data,EHCACL Index,PX_LAST,Chile Current Account ,Chile ,Latam 
+Data,ARCPIYOY Index,PX_LAST,Argentina CPI ,Argentina ,Latam 
+Data,ARGQPYOX Index,PX_LAST,Argentina GDP,Argentina ,Latam 
+Data,ARUERATE Index,PX_LAST,Argentina Unemployment ,Argentina ,Latam 
+Data,EHCAAR Index,PX_LAST,Argentina Current Account ,Argentina ,Latam 
+Data,MXCPYOY Index,PX_LAST,Mexico CPI ,Mexico ,Latam 
+Data,MXGCTOT Index,PX_LAST,Mexico GDP,Mexico ,Latam 
+Data,MXUERATE Index,PX_LAST,Mexico Unemployment ,Mexico ,Latam 
+Data,EHCAMX Index,PX_LAST,Mexico Current Account ,Mexico ,Latam 
+Forecast ,ECGDBR,PX_LAST,Brazil GDP Forecast ,Brazil ,Latam 
+Forecast ,ECPIBR,PX_LAST,Brazil CPI Forecast ,Brazil ,Latam 
+Forecast ,ECUPBR,PX_LAST,Brazil Unemployment Forecast ,Brazil ,Latam 
+Forecast ,ECCABR,PX_LAST,Brazil Current Account Forecast ,Brazil ,Latam 
+Forecast ,ECGDMX,PX_LAST,Mexico GDP Forecast ,Mexico ,Latam 
+Forecast ,ECPIMX,PX_LAST,Mexico CPI Forecast ,Mexico ,Latam 
+Forecast ,ECUPMX,PX_LAST,Mexico Unemployment Forecast ,Mexico ,Latam 
+Forecast ,ECCAMX,PX_LAST,Mexico Current Account Forecast ,Mexico ,Latam 
+Forecast ,ECGDCL,PX_LAST,Chile GDP Forecast ,Chile ,Latam 
+Forecast ,ECPICL,PX_LAST,Chile CPI Forecast ,Chile ,Latam 
+Forecast ,ECUPCL,PX_LAST,Chile Unemployment Forecast ,Chile ,Latam 
+Forecast ,ECCACL,PX_LAST,Chile Current Account Forecast ,Chile ,Latam 
+Data,EHPIIN Index,PX_LAST,India CPI ,India,APAC 
+Data,EHGDIN Index,PX_LAST,India GDP,India,APAC 
+Data,EHUPINY Index,PX_LAST,India Unemployment ,India,APAC 
+Data,EHCAINY Index,PX_LAST,India Current Account ,India,APAC 
+Data,HPDDINDI Index,PX_LAST,India Debt to GDP,India,APAC 
+Data,KOCPIYOY Index,PX_LAST,Korea CPI ,Korea,APAC 
+Data,EHGDKRY Index,PX_LAST,Korea GDP,Korea,APAC 
+Data,EHUPKRY Index,PX_LAST,Korea Unemployment ,Korea,APAC 
+Data,EHCAKRY Index,PX_LAST,Korea Current Account ,Korea,APAC 
+Data,EHPIID Index,PX_LAST,Indonesia CPI ,Indonesia ,APAC 
+Data,EHGDIDY Index,PX_LAST,Indonesia GDP,Indonesia ,APAC 
+Data,EHUPIDY Index,PX_LAST,Indonesia Unemployment ,Indonesia ,APAC 
+Data,EHCAIDY Index,PX_LAST,Indonesia Current Account ,Indonesia ,APAC 
+Data,EHPITHY Index,PX_LAST,Thailand CPI ,Thailand,APAC 
+Data,EHGDTHY Index,PX_LAST,Thailand GDP,Thailand,APAC 
+Data,EHUPTHY Index,PX_LAST,Thailand Unemployment ,Thailand,APAC 
+Data,EHCATHY Index,PX_LAST,Thailand Current Account ,Thailand,APAC 
+Forecast ,ECGDIN,PX_LAST,India GDP Forecast ,India,APAC 
+Forecast ,ECPIIN,PX_LAST,India CPI Forecast ,India,APAC 
+Forecast ,ECUPIN,PX_LAST,India Unemployment Forecast ,India,APAC 
+Forecast ,ECCAIN,PX_LAST,India Current Account Forecast ,India,APAC 
+Forecast ,ECGDKR,PX_LAST,Korea GDP Forecast ,Korea,APAC 
+Forecast ,ECPIKR,PX_LAST,Korea CPI Forecast ,Korea,APAC 
+Forecast ,ECUPKR,PX_LAST,Korea Unemployment Forecast ,Korea,APAC 
+Forecast ,ECCAKR,PX_LAST,Korea Current Account Forecast ,Korea,APAC 
+Forecast ,ECGDID,PX_LAST,Indonesia GDP Forecast ,Indonesia,APAC 
+Forecast ,ECPIID,PX_LAST,Indonesia CPI Forecast ,Indonesia,APAC 
+Forecast ,ECUPID,PX_LAST,Indonesia Unemployment Forecast ,Indonesia,APAC 
+Forecast ,ECCAID,PX_LAST,Indonesia Current Account Forecast ,Indonesia,APAC 
+Forecast ,ECGDTH,PX_LAST,Thailand GDP Forecast ,Thailand,APAC 
+Forecast ,ECPIID,PX_LAST,Thailand CPI Forecast ,Thailand,APAC 
+Forecast ,ECUPID,PX_LAST,Thailand Unemployment Forecast ,Thailand,APAC 
+Forecast ,ECCAID,PX_LAST,Thailand Current Account Forecast ,Thailand,APAC 
+Data,EHPIRUY Index,PX_LAST,Russia CPI ,Russia,EMEA
+Data,EHGDRUY Index,PX_LAST,Russia GDP,Russia,EMEA
+Data,EHUPRUY Index,PX_LAST,Russia Unemployment ,Russia,EMEA
+Data,EHCARUY Index,PX_LAST,Russia Current Account ,Russia,EMEA
+Data,EHGDTRY Index,PX_LAST,Turkey CPI ,Turkey,EMEA
+Data,EHPITRY Index,PX_LAST,Turkey GDP,Turkey,EMEA
+Data,EHUPTRY Index,PX_LAST,Turkey Unemployment ,Turkey,EMEA
+Data,EHCATRY Index,PX_LAST,Turkey Current Account ,Turkey,EMEA
+Data,EHPIZAY Index,PX_LAST,South Africa CPI ,South Africa,EMEA
+Data,EHGDZAY Index,PX_LAST,South Africa GDP,South Africa ,EMEA
+Data,EHUPZAY Index,PX_LAST,South Africa Unemployment ,South Africa ,EMEA
+Data,EHCAZAY Index,PX_LAST,South Africa Current Account ,South Africa ,EMEA
+Forecast ,ECGDTR,PX_LAST,Turkey GDP Forecast ,Turkey,EMEA
+Forecast ,ECPITR,PX_LAST,Turkey CPI Forecast ,Turkey,EMEA
+Forecast ,ECUPTR,PX_LAST,Turkey Unemployment Forecast ,Turkey,EMEA
+Forecast ,ECCATR,PX_LAST,Turkey Current Account Forecast ,Turkey,EMEA
+Forecast ,ECGDRU,PX_LAST,Russia GDP Forecast ,Russia,EMEA
+Forecast ,ECPIRU,PX_LAST,Russia CPI Forecast ,Russia,EMEA
+Forecast ,ECUPRU,PX_LAST,Russia Unemployment Forecast ,Russia,EMEA
+Forecast ,ECCARU,PX_LAST,Russia Current Account Forecast ,Russia,EMEA
+Forecast ,ECGDZA,PX_LAST,South Africa GDP Forecast ,South Africa,EMEA
+Forecast ,ECPIZA,PX_LAST,South Africa CPI Forecast ,South Africa,EMEA
+Forecast ,ECUPZA,PX_LAST,South Africa Unemployment Forecast ,South Africa,EMEA
+Forecast ,ECCAZA,PX_LAST,South Africa Current Account Forecast ,South Africa,EMEA

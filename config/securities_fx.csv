@@ -1,0 +1,134 @@
+Type,Ticker,Field,Desc,Ex,Country ,Region 
+Exchange Rate ,USDARS Curncy,PX_LAST,USD vs Agrentine Peso,Bilat,Argentina,Latam
+Exchange Rate ,EURARS Curncy,PX_LAST,EUR vs Agrentine Peso,Bilat,Argentina,Latam
+Exchange Rate ,GBPARS Curncy,PX_LAST,GBP vs Agrentine Peso,Bilat,Argentina,Latam
+Exchange Rate ,ARSJPY Curncy,PX_LAST,JPY vs Agrentine Peso,Bilat,Argentina,Latam
+Exchange Rate ,AUDARS Curncy,PX_LAST,AUD vs Agrentine Peso,Bilat,Argentina,Latam
+ERI,JBDCARS Index,PX_LAST,Argentina ERI,ERI,Argentina,Latam
+Exchange Rate ,USDBRL Curncy,PX_LAST,USD vs Brazil Real,Bilat,Brazil,Latam
+Exchange Rate ,EURBRL Curncy,PX_LAST,EUR vs Brazil Real,Bilat,Brazil,Latam
+Exchange Rate ,GBPBRL Curncy,PX_LAST,GBP vs Brazil Real,Bilat,Brazil,Latam
+Exchange Rate ,BRLJPY Curncy,PX_LAST,JPY vs Brazil Real,Bilat,Brazil,Latam
+Exchange Rate ,AUDBRL Curncy,PX_LAST,AUD vs Brazil Real,Bilat,Brazil,Latam
+ERI,JBDCBRL Index,PX_LAST,Brazil ERI,ERI,Brazil,Latam
+Risk Reversal,USDBRL25R1M BGN Curncy,PX_LAST,Brazil 1-month risk reveral,Risk,Brazil,Latam
+Risk Reversal,USDBRL25R3M BGN Curncy,PX_LAST,Brazil 3-month risk reveral,Risk,Brazil,Latam
+Risk Reversal,USDBRL25R1Y BGN Curncy,PX_LAST,Brazil 1-year risk reveral,Risk,Brazil,Latam
+Implied Volatility ,USDBRLV1M BGN Curncy,PX_LAST,Brazil 1-month vol,Vol,Brazil,Latam
+Implied Volatility ,USDBRLV3M BGN Curncy,PX_LAST,Brazil 3-month vol,Vol,Brazil,Latam
+Implied Volatility ,USDBRLV1Y BGN Curncy,PX_LAST,Brazil 1-year vol,Vol,Brazil,Latam
+Exchange Rate ,USDCLP Curncy,PX_LAST,USD vs Chile Peso,Bilat,Chile,Latam
+Exchange Rate ,EURCLP Curncy,PX_LAST,EUR vs Chile Peso,Bilat,Chile,Latam
+Exchange Rate ,GBPCLP Curncy,PX_LAST,GBP vs Chile Peso,Bilat,Chile,Latam
+Exchange Rate ,JPYCLP Curncy,PX_LAST,JPY vs Chile Peso,Bilat,Chile,Latam
+Exchange Rate ,AUDCLP Curncy,PX_LAST,AUD vs Chile Peso,Bilat,Chile,Latam
+ERI,JBDCCLP Index,PX_LAST,Chile ERI,ERI,Chile,Latam
+Risk Reversal,USDCLP25R1M BGN Curncy,PX_LAST,Chile 1-month risk reveral,Risk,Chile,Latam
+Risk Reversal,USDCLP25R3M BGN Curncy,PX_LAST,Chile 3-month risk reveral,Risk,Chile,Latam
+Risk Reversal,USDCLP25R1Y BGN Curncy,PX_LAST,Chile 1-year risk reveral,Risk,Chile,Latam
+Implied Volatility ,USDCLPV1M BGN Curncy,PX_LAST,Chile 1-month vol,Vol,Chile,Latam
+Implied Volatility ,USDCLPV3M BGN Curncy,PX_LAST,Chile 3-month vol,Vol,Chile,Latam
+Implied Volatility ,USDCLPV1Y BGN Curncy,PX_LAST,Chile 1-year vol,Vol,Chile,Latam
+Exchange Rate ,USDMXN Curncy,PX_LAST,USD vs Mexico Peso,Bilat,Mexico,Latam
+Exchange Rate ,EURMXN Curncy,PX_LAST,EUR vs Mexico Peso,Bilat,Mexico,Latam
+Exchange Rate ,GBPMXN Curncy,PX_LAST,GBP vs Mexico Peso,Bilat,Mexico,Latam
+Exchange Rate ,MXNJPY Curncy,PX_LAST,JPY vs Mexico Peso,Bilat,Mexico,Latam
+Exchange Rate ,AUDMXN Curncy,PX_LAST,AUD vs Mexico Peso,Bilat,Mexico,Latam
+ERI,JBDCMXN Index,PX_LAST,Mexico ERI,ERI,Mexico,Latam
+Risk Reversal,USDMXN25R1M Curncy,PX_LAST,Mexico 1-month risk reveral,Risk,Mexico,Latam
+Risk Reversal,USDMXN25R3M Curncy,PX_LAST,Mexico 3-month risk reveral,Risk,Mexico,Latam
+Risk Reversal,USDMXN25R1Y Curncy,PX_LAST,Mexico 1-year risk reveral,Risk,Mexico,Latam
+Implied Volatility ,USDMXNV1M Curncy,PX_LAST,Mexico 1-month vol,Vol,Mexico,Latam
+Implied Volatility ,USDMXNV13M Curncy,PX_LAST,Mexico 3-month vol,Vol,Mexico,Latam
+Implied Volatility ,USDMXNV1Y Curncy,PX_LAST,Mexico 1-year vol,Vol,Mexico,Latam
+Exchange Rate ,USDINR Curncy,PX_LAST,USD vs Indian Rupee,Bilat,India,APAC
+Exchange Rate ,EURINR Curncy,PX_LAST,EUR vs Indian Rupee,Bilat,India,APAC
+Exchange Rate ,GBPINR Curncy,PX_LAST,GBP vs Indian Rupee,Bilat,India,APAC
+Exchange Rate ,JPYINR Curncy,PX_LAST,JPY vs Indian Rupee,Bilat,India,APAC
+Exchange Rate ,CNYINR Curncy,PX_LAST,CNY vs Indian Rupee,Bilat,India,APAC
+Exchange Rate ,AEDINR Curncy,PX_LAST,AED vs Indian Rupee,Bilat,India,APAC
+ERI,JBDCINR Index,PX_LAST,India ERI,ERI,India,APAC
+Risk Reversal,USDINR25R1M Curncy,PX_LAST,India 1-month risk reveral,Risk,India,APAC
+Risk Reversal,USDINR25R3M Curncy,PX_LAST,India 3-month risk reveral,Risk,India,APAC
+Risk Reversal,USDINR25R1Y Curncy,PX_LAST,India 1-year risk reveral,Risk,India,APAC
+Implied Volatility ,USDINRV1M Curncy,PX_LAST,India 1-month vol,Vol,India,APAC
+Implied Volatility ,USDINRV3M Curncy,PX_LAST,India 3-month vol,Vol,India,APAC
+Implied Volatility ,USDINRV1Y Curncy,PX_LAST,India 1-year vol,Vol,India,APAC
+Exchange Rate ,USDKRW Curncy,PX_LAST,USD vs Korean won,Bilat,Korea,APAC
+Exchange Rate ,EURKRW Curncy,PX_LAST,EUR vs Korean won,Bilat,Korea,APAC
+Exchange Rate ,GBPKRW Curncy,PX_LAST,GBP vs Korean won,Bilat,Korea,APAC
+Exchange Rate ,JPYKRW Curncy,PX_LAST,JPY vs Korean won,Bilat,Korea,APAC
+Exchange Rate ,CNYKRW Curncy,PX_LAST,CNY vs Korean won,Bilat,Korea,APAC
+Exchange Rate ,VNDKRW Curncy,PX_LAST,VND vs Korean won,Bilat,Korea,APAC
+ERI,JBDCKRW Index,PX_LAST,Korea ERI,ERI,Korea,APAC
+Risk Reversal,USDKRW25R1M Curncy,PX_LAST,Korea 1-month risk reveral,Risk,Korea,APAC
+Risk Reversal,USDKRW25R1M Curncy,PX_LAST,Korea 3-month risk reveral,Risk,Korea,APAC
+Risk Reversal,USDKRW25R1Y Curncy,PX_LAST,Korea 1-year risk reveral,Risk,Korea,APAC
+Implied Volatility ,USDKRWV1M Curncy,PX_LAST,Korea 1-month vol,Vol,Korea,APAC
+Implied Volatility ,USDKRWV3M Curncy,PX_LAST,Korea 3-month vol,Vol,Korea,APAC
+Implied Volatility ,USDKRWV1Y Curncy,PX_LAST,Korea 1-year vol,Vol,Korea,APAC
+Exchange Rate ,USDIDR Curncy,PX_LAST,USD vs Indonesian Rupiah,Bilat,Indonesia,APAC
+Exchange Rate ,EURIDR Curncy,PX_LAST,EUR vs Indonesian Rupiah,Bilat,Indonesia,APAC
+Exchange Rate ,GBPIDR Curncy,PX_LAST,GBP vs Indonesian Rupiah,Bilat,Indonesia,APAC
+Exchange Rate ,JPYIDR Curncy,PX_LAST,JPY vs Indonesian Rupiah,Bilat,Indonesia,APAC
+Exchange Rate ,CNYIDR Curncy,PX_LAST,CNY vs Indonesian Rupiah,Bilat,Indonesia,APAC
+Exchange Rate ,SGDIDR Curncy,PX_LAST,SGD vs Indonesian Rupiah,Bilat,Indonesia,APAC
+ERI,JBDCIDR Index,PX_LAST,Indonesia ERI,ERI,Indonesia,APAC
+Risk Reversal,USDIDR25R1M Curncy,PX_LAST,Indonesian 1-month risk reveral,Risk,Indonesia,APAC
+Risk Reversal,USDIDR25R3M Curncy,PX_LAST,Indonesian 3-month risk reveral,Risk,Indonesia,APAC
+Risk Reversal,USDIDR25R1Y Curncy,PX_LAST,Indonesian 1-year risk reveral,Risk,Indonesia,APAC
+Implied Volatility ,USDIDRV1M Curncy,PX_LAST,Indonesian 1-month vol,Vol,Indonesia,APAC
+Implied Volatility ,USDIDRV3M Curncy,PX_LAST,Indonesian 3-month vol,Vol,Indonesia,APAC
+Implied Volatility ,USDIDRV1Y Curncy,PX_LAST,Indonesian 1-year vol,Vol,Indonesia,APAC
+Exchange Rate ,USDTHB Curncy,PX_LAST,USD vs Thai baht,Bilat,Thailand,APAC
+Exchange Rate ,EURTHB Curncy,PX_LAST,EUR vs Thai baht,Bilat,Thailand,APAC
+Exchange Rate ,GBPTHB Curncy,PX_LAST,GBP vs Thai baht,Bilat,Thailand,APAC
+Exchange Rate ,JPYTHB Curncy,PX_LAST,JPY vs Thai baht,Bilat,Thailand,APAC
+Exchange Rate ,CNYTHB Curncy,PX_LAST,CNY vs Thai baht,Bilat,Thailand,APAC
+Exchange Rate ,AUDTHB Curncy,PX_LAST,AUD vs Thai baht,Bilat,Thailand,APAC
+ERI,JBDCIDR Index,PX_LAST,Thailand ERI,ERI,Thailand,APAC
+Risk Reversal,USDTHB25R1M Curncy,PX_LAST,Thailand 1-month risk reveral,Risk,Thailand,APAC
+Risk Reversal,USDTHB25R3M Curncy,PX_LAST,Thailand 3-month risk reveral,Risk,Thailand,APAC
+Risk Reversal,USDTHB25R1Y Curncy,PX_LAST,Thailand 1-year risk reveral,Risk,Thailand,APAC
+Implied Volatility ,USDTHBV1M Curncy,PX_LAST,Thailand 1-month vol,Vol,Thailand,APAC
+Implied Volatility ,USDTHBV3M Curncy,PX_LAST,Thailand 3-month vol,Vol,Thailand,APAC
+Implied Volatility ,USDTHBV1Y Curncy,PX_LAST,Thailand 1-year vol,Vol,Thailand,APAC
+Exchange Rate ,USDTRY Curncy,PX_LAST,USD vs Turkey,Bilat,Turkey,EMEA
+Exchange Rate ,EURTRY Curncy,PX_LAST,EUR vs Turkey,Bilat,Turkey,EMEA
+Exchange Rate ,GBPTRY Curncy,PX_LAST,GBP vs Turkey,Bilat,Turkey,EMEA
+Exchange Rate ,JPYTRY Curncy,PX_LAST,JPY vs Turkey,Bilat,Turkey,EMEA
+Exchange Rate ,CNYTRY Curncy,PX_LAST,CNY vs Turkey,Bilat,Turkey,EMEA
+Exchange Rate ,AEDTRY Curncy,PX_LAST,AED vs Turkey,Bilat,Turkey,EMEA
+ERI,JBDCTRY Index,PX_LAST,Turkey ERI,ERI,Turkey,EMEA
+Risk Reversal,USDTRY25R1M Curncy,PX_LAST,Turkey 1-month risk reveral,Risk,Turkey,EMEA
+Risk Reversal,USDTRY25R3M Curncy,PX_LAST,Turkey 3-month risk reveral,Risk,Turkey,EMEA
+Risk Reversal,USDTRY25R1Y Curncy,PX_LAST,Turkey 1-year risk reveral,Risk,Turkey,EMEA
+Implied Volatility ,USDTRYV1M Curncy,PX_LAST,Turkey 1-month vol,Vol,Turkey,EMEA
+Implied Volatility ,USDTRYV3M Curncy,PX_LAST,Turkey 3-month vol,Vol,Turkey,EMEA
+Implied Volatility ,USDTRYV1Y Curncy,PX_LAST,Turkey 1-year vol,Vol,Turkey,EMEA
+Exchange Rate ,USDRUB Curncy,PX_LAST,USD vs Russia,Bilat,Russia,EMEA
+Exchange Rate ,EURRUB Curncy,PX_LAST,EUR vs Russia,Bilat,Russia,EMEA
+Exchange Rate ,GBPRUB Curncy,PX_LAST,GBP vs Russia,Bilat,Russia,EMEA
+Exchange Rate ,JPYRUB Curncy,PX_LAST,JPY vs Russia,Bilat,Russia,EMEA
+Exchange Rate ,CNYRUB Curncy,PX_LAST,CNY vs Russia,Bilat,Russia,EMEA
+Exchange Rate ,VNDRUB Curncy,PX_LAST,VND vs Russia,Bilat,Russia,EMEA
+ERI,JBDCRUB Index,PX_LAST,Russia ERI,ERI,Russia,EMEA
+Risk Reversal,USDRUB25R1M Curncy,PX_LAST,Russia 1-month risk reveral,Risk,Russia,EMEA
+Risk Reversal,USDRUB25R1M Curncy,PX_LAST,Russia 3-month risk reveral,Risk,Russia,EMEA
+Risk Reversal,USDRUB25R1Y Curncy,PX_LAST,Russia 1-year risk reveral,Risk,Russia,EMEA
+Implied Volatility ,USDRUBV1M Curncy,PX_LAST,Russia 1-month vol,Vol,Russia,EMEA
+Implied Volatility ,USDRUBV3M Curncy,PX_LAST,Russia 3-month vol,Vol,Russia,EMEA
+Implied Volatility ,USDRUBV1Y Curncy,PX_LAST,Russia 1-year vol,Vol,Russia,EMEA
+Exchange Rate ,USDZAR Curncy,PX_LAST,USD vs South Africa,Bilat,South Africa,EMEA
+Exchange Rate ,EURZAR Curncy,PX_LAST,EUR vs South Africa,Bilat,South Africa,EMEA
+Exchange Rate ,GBPZAR Curncy,PX_LAST,GBP vs South Africa,Bilat,South Africa,EMEA
+Exchange Rate ,JPYZAR Curncy,PX_LAST,JPY vs South Africa,Bilat,South Africa,EMEA
+Exchange Rate ,CNYZAR Curncy,PX_LAST,CNY vs South Africa,Bilat,South Africa,EMEA
+Exchange Rate ,SGDZAR Curncy,PX_LAST,SGD vs South Africa,Bilat,South Africa,EMEA
+ERI,JBDCZAR Index,PX_LAST,South Africa ERI,ERI,South Africa,EMEA
+Risk Reversal,USDZAR25R1M Curncy,PX_LAST,South Africa 1-month risk reveral,Risk,South Africa,EMEA
+Risk Reversal,USDZAR25R3M Curncy,PX_LAST,South Africa 3-month risk reveral,Risk,South Africa,EMEA
+Risk Reversal,USDZAR25R1Y Curncy,PX_LAST,South Africa 1-year risk reveral,Risk,South Africa,EMEA
+Implied Volatility ,USDZARV1M Curncy,PX_LAST,South Africa 1-month vol,Vol,South Africa,EMEA
+Implied Volatility ,USDZARV3M Curncy,PX_LAST,South Africa 3-month vol,Vol,South Africa,EMEA
+Implied Volatility ,USDZARV1Y Curncy,PX_LAST,South Africa 1-year vol,Vol,South Africa,EMEA

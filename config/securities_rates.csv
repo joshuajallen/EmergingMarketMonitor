@@ -1,0 +1,102 @@
+Type,Ticker,Field,Desc,Country,Maturity,Region 
+Bank Rate,BZSTSETA Index,PX_LAST,Bank Rate,Brazil,0,Latam 
+Rate,GTBRL3M Corp,PX_LAST,3-month  ,Brazil,0.25,Latam 
+Rate,GTBRL1YR Corp,PX_LAST,1-year  ,Brazil,1,Latam 
+Rate,GTBRL2YR Corp,PX_LAST,2-year  ,Brazil,2,Latam 
+Rate,GTBRL5YR Corp,PX_LAST,5-year  ,Brazil,5,Latam 
+Rate,GTBRL10YR Corp,PX_LAST,10-year  ,Brazil,10,Latam 
+Forward,G0393 5Y5Y BLC2 Curncy,PX_LAST,5y5y,Brazil,10,Latam 
+Bank Rate,MXONBR Index,PX_LAST,Bank Rate,Mexico,0,Latam 
+Rate,MPTBC CMPN Curncy,PX_LAST,3-month  ,Mexico,0.25,Latam 
+Rate,GTMXN1Y Govt,PX_LAST,1-year  ,Mexico,1,Latam 
+Rate,GTMXN2Y Govt,PX_LAST,2-year  ,Mexico,2,Latam 
+Rate,GTMXN5Y Govt,PX_LAST,5-year  ,Mexico,5,Latam 
+Rate,GTMXN10Y Govt,PX_LAST,10-year  ,Mexico,10,Latam 
+Rate,GTMXN30Y Govt,PX_LAST,30-year  ,Mexico,30,Latam 
+Forward,G0251 5Y5Y BLC2 Curncy,PX_LAST,5y5y,Mexico,10,Latam 
+Bank Rate,CHOVCHOV Index,PX_LAST,Bank Rate,Chile,0,Latam 
+Rate,GTCLP1Y Govt,PX_LAST,1-year  ,Chile,1,Latam 
+Rate,GTCLP2Y Govt,PX_LAST,2-year  ,Chile,2,Latam 
+Rate,GTCLP4YR Corp,PX_LAST,5-year  ,Chile,5,Latam 
+Rate,GTCLP10Y Govt,PX_LAST,10-year  ,Chile,10,Latam 
+Forward,.CHIL5Y5Y F Index,PX_LAST,5y5y,Chile,10,Latam 
+Rate,GTCLP30Y Govt,PX_LAST,30-year  ,Chile,30,Latam 
+Breakeven,BRGGBE02 Index,PX_LAST,2-year BE,Brazil,2,Latam 
+Breakeven,BRGGBE05 Index,PX_LAST,5-year BE,Brazil,5,Latam 
+Breakeven,BRGGBE10 Index,PX_LAST,10-year BE,Brazil,10,Latam 
+Breakeven,BRGGBE30 Index,PX_LAST,30-year BE,Brazil,30,Latam 
+Breakeven,MXGGBE02 Index,PX_LAST,2-year BE,Mexico,2,Latam 
+Breakeven,MXGGBE05 Index,PX_LAST,10-year BE,Mexico,10,Latam 
+Breakeven,MXGGBE30 Index,PX_LAST,30-year BE,Mexico,30,Latam 
+Breakeven,.CLBE05Y G Index,PX_LAST,5-year BE,Chile,5,Latam 
+Breakeven,.CLBE10Y G Index,PX_LAST,10-year BE ,Chile,10,Latam 
+Summary ,BRLDBLTN Index,PX_LAST,Debt Outstanding ,Brazil ,0,Latam 
+Summary ,ECOQMXN Index,PX_LAST,Debt Outstanding ,Mexico,0,Latam 
+Summary ,HELDCLGG Index,PX_LAST,Debt Outstanding ,Chile,0,Latam 
+Rate ,USGG10YR Index,PX_LAST,10-year,US,10,US
+Rate ,USGG2YR Index,PX_LAST,2-year,US,2,US
+Rate,GTUSDBR10Y Govt,PX_LAST,10-year ,Brazil (USD),10,Latam 
+Rate,GTUSDCL10YR Corp,PX_LAST,10-year ,Chile (USD),10,Latam 
+Rate,GTUSDMX10YR Corp,PX_LAST,10-year ,Mexico (USD),10,Latam 
+Rate,GTUSDBR2Y Govt,PX_LAST,2-year ,Brazil (USD),2,Latam 
+Rate,GTUSDCL1YR Corp,PX_LAST,1-year ,Chile (USD),1,Latam 
+Rate,GTUSDMX2YR Corp,PX_LAST,2-year ,Mexico (USD),2,Latam 
+Bank Rate,TUBR1WRA Index,PX_LAST,Bank Rate,Turkey,0,EMEA
+Rate,TUAT3MAY Index,PX_LAST,3-month  ,Turkey,0.25,EMEA
+Rate,GTTRY1Y Govt,PX_LAST,1-year  ,Turkey,1,EMEA
+Rate,GTTRY2Y Govt,PX_LAST,2-year  ,Turkey,2,EMEA
+Rate,GTTRY5Y Govt,PX_LAST,5-year  ,Turkey,5,EMEA
+Rate,GTTRY7Y Govt,PX_LAST,10-year  ,Turkey,10,EMEA
+Forward,S0235FS 5Y5Y BLC Curncy,PX_LAST,5y5y,Turkey,10,EMEA
+Bank Rate,RREFKEYR Index,PX_LAST,Bank Rate,Russia,0,EMEA
+Rate,GTRUB1Y Govt,PX_LAST,1-year  ,Russia,1,EMEA
+Rate,GTRUB3Y Govt,PX_LAST,3-year  ,Russia,3,EMEA
+Rate,GTRUB5Y Govt,PX_LAST,5-year  ,Russia,5,EMEA
+Rate,GTRUB10Y Govt,PX_LAST,10-year  ,Russia,10,EMEA
+Rate,GTRUB30Y Govt,PX_LAST,30-year  ,Russia,30,EMEA
+Forward,S0237FS 5Y5Y BLC Curncy,PX_LAST,5y5y,Russia,10,EMEA
+Bank Rate,SARPRT Index,PX_LAST,Bank Rate,South Africa,0,EMEA
+Rate,GTZAR1Y Govt,PX_LAST,1-year  ,South Africa,1,EMEA
+Rate,GTZAR2Y Govt,PX_LAST,2-year  ,South Africa,2,EMEA
+Rate,GTZAR8Y Govt,PX_LAST,5-year  ,South Africa,5,EMEA
+Rate,GTZAR10Y Govt,PX_LAST,10-year  ,South Africa,10,EMEA
+Forward,S0018FS 5Y5Y BLC Curncy,PX_LAST,5y5y,South Africa,10,EMEA
+Rate,GTZAR30Y Govt,PX_LAST,30-year  ,South Africa,30,EMEA
+Breakeven,.RUB5YBE G Index,PX_LAST,5-year BE,Russia,5,EMEA
+Breakeven,SAGGBE05 Index,PX_LAST,5-year BE,South Africa,5,EMEA
+Breakeven,SAGGBE10 Index,PX_LAST,10-year BE ,South Africa,10,EMEA
+Summary ,HELDTR01 Index,PX_LAST,Debt Outstanding ,Turkey ,0,EMEA
+Summary ,HELDRUGD Index,PX_LAST,Debt Outstanding ,Russia,0,EMEA
+Summary ,HELDZA01 Index,PX_LAST,Debt Outstanding ,South Africa,0,EMEA
+Rate,GTUSDTR10Y Govt,PX_LAST,10-year ,Turkey (USD),10,EMEA
+Rate,GTUSDRU5Y Govt,PX_LAST,10-year,Russia (USD),10,EMEA
+Rate,GTUSDTR2Y Govt,PX_LAST,2-year ,Turkey (USD),2,EMEA
+Bank Rate,INRPYLDP Index,PX_LAST,Bank Rate,India,0,APAC
+Rate,GTINR1YR Govt,PX_LAST,1-year  ,India,1,APAC
+Rate,GTINR2YR Govt,PX_LAST,2-year  ,India,2,APAC
+Rate,GTINR5YR Govt,PX_LAST,5-year  ,India,5,APAC
+Rate,GTINR10YR Govt,PX_LAST,10-year  ,India,10,APAC
+Rate,GTINR30YR Govt,PX_LAST,30-year,India,30,APAC
+Bank Rate,IDBIRRPO Index,PX_LAST,Reverse Repo,Indonesia,0,APAC
+Rate,GTIDR1Y Govt,PX_LAST,1-year  ,Indonesia,1,APAC
+Rate,GTIDR2Y Govt,PX_LAST,2-year  ,Indonesia,2,APAC
+Rate,GTIDR5Y Govt,PX_LAST,5-year  ,Indonesia,5,APAC
+Rate,GTIDR10Y Govt,PX_LAST,10-year  ,Indonesia,10,APAC
+Rate,GTIDR30Y Govt,PX_LAST,30-year  ,Indonesia,30,APAC
+Rate,GTUSDID2Y Corp,PX_LAST,2-year  ,Indonesia (USD),2,APAC
+Rate,GTUSDID10Y Corp,PX_LAST,10-year  ,Indonesia (USD),10,APAC
+Rate,GTKRW1Y Govt,PX_LAST,1-year  ,Korea,1,APAC
+Rate,GTKRW2Y Govt,PX_LAST,2-year  ,Korea,2,APAC
+Rate,GTKRW5Y Govt,PX_LAST,5-year  ,Korea,5,APAC
+Rate,GTKRW10Y Govt,PX_LAST,10-year  ,Korea,10,APAC
+Rate,GTKRW30Y Govt,PX_LAST,30-year  ,Korea,30,APAC
+Breakeven,KWGGBE Index,PX_LAST,5-year  ,Korea,5,APAC
+Bank Rate,KORP7DR Index,PX_LAST,Bank Rate,Korea,0,APAC
+Rate,TBDC1Y Govt,PX_LAST,1-year  ,Thailand,1,APAC
+Rate,TBDC2Y Govt,PX_LAST,2-year  ,Thailand,2,APAC
+Rate,TBDC5Y Govt,PX_LAST,5-year  ,Thailand,5,APAC
+Rate,TBDC10Y Govt,PX_LAST,10-year  ,Thailand,10,APAC
+Rate,TBDC30Y Govt,PX_LAST,30-year  ,Thailand,30,APAC
+Bank Rate,BTRR1DAY Index,PX_LAST,Repo Rate,Thailand,0,APAC
+Rate,GTUSDPH2Y Corp,PX_LAST,2-year  ,Philippines (USD),2,APAC
+Rate,GTUSDPH10Y Corp,PX_LAST,10-year  ,Philippines (USD),10,APAC
