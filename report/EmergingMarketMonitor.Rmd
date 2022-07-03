@@ -1,0 +1,3096 @@
+---
+title: "Emerging Market Monitor"
+date: "`r format(Sys.time(), '%d %b, %Y')`"
+output: 
+  flexdashboard::flex_dashboard:
+    orientation: columns
+    vertical_layout: fill
+    theme: lumen 
+---
+
+<style>
+
+.navbar-brand {
+  display: grid;
+  margin: auto;
+  padding: 5px;
+}
+
+.navbar-author {
+  margin-left: 0px;
+}
+
+table {
+  white-space: nowrap;
+}
+
+</style>
+
+```{r setup, include=FALSE}
+
+checkpoint_date <- "2021-03-03"
+source(
+  "\\\\istdba/BuildArchive/ShinyApps/EnvironmentScript/EnvironmentScript_Latest/LOCAL/Artifactory/environment.R"
+)
+message(paste0("checkpoint_date: ", checkpoint_date))
+boeCheckpoint(checkpoint_date, scanForPackages = TRUE)
+
+app_config <- new.env()
+
+app_config$boe_palette <- rep(c(
+  "#00839D", #  1 teal
+  "#A51140", #  2 red
+  "#165788", #  3 light blue
+  "#b25395", #  4 pink
+  "#3b855f", #  5 green
+  "#2f4f5b", #  6 very dark teal
+  "#6C0721", #  7 maroon
+  "#0f7cbf", #  8 blue
+  "#555555", # 10 dark grey
+  "#1E1E1E"  # 11 black
+), 3)
+
+app_config$boe_markers_scatter <-
+  c(rep("circle",  length(app_config$boe_palette)),
+    rep("square",  length(app_config$boe_palette)),
+    rep("diamond", length(app_config$boe_palette)))
+
+app_config$cache_invalidation_seconds <- 5 * 60
+app_config$default_height <- "600px"
+app_config$font_style <- list(family = c("Cabin"))
+app_config$headroom <- "85px"
+app_config$headroom_0.75 <- "64px"
+
+
+
+library(dplyr)
+library(DT)
+library(flock)
+library(lubridate)
+library(plotly)
+library(purrr)
+library(Rblpapi)
+library(rjson)
+library(readr)
+library(sparkline)
+library(stringr)
+#library(tidyr)
+library(zoo)
+library(plotly)
+library(ggplot2)
+library(flexdashboard)
+library(boeWebConnectr)
+library(DT)
+FIRVr_str <- "library(FIRVr, lib.loc = '\\\\\\\\markets-nwsrv/DATA/Offdata/RM/_R code repository/RMPackages/_R4.0')"
+eval(parse(text = FIRVr_str))
+
+devtools::load_all('\\\\markets/DATA/Data/Offdata/RM/_R code repository/RMPackages/feedeR')
+
+# source modules and functions 
+# functions
+source("../functions/plotly_config.R")
+source("../functions/functions.R")
+
+Rblpapi::blpConnect()
+# modules 
+source("../_modules/RATE_MODULE.R")
+source("../_modules/FX_MODULE.R")
+source("../_modules/ECONOMY_MODULE.R")
+source("../_modules/EQUITY_MODULE.R")
+source("../_modules/SUMMARY_MODULE.R")
+source("../_modules/NEWS_MODULE.R")
+source("../_modules/HEADLINE_MODULE.R")
+
+
+```
+
+<script>
+$(document).ready(function(){
+    $('[data-toggle="popover"]').popover(); 
+});
+</script>
+
+EM Overview {data-icon="fa-globe-americas"}
+=====================================  
+
+Column
+-------------------------------------
+  
+### EM Stress Monitor 
+  
+```{r em_stress}
+
+market_stress_create_datatable(market_stress,
+                               row_group_index  = 0,
+                               underline_tickers = TRUE)
+```
+
+
+
+LatAm Rates {data-icon="fa-copyright"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### Brazil public debt
+  
+```{r brazil}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Brazil"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Brazil Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Chile public debt
+
+```{r chile}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Chile"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Chile Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### Mexico public debt
+
+```{r mexico}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Mexico"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "Mexico Debt Outstanding", icon = "-faarea-chart", color = app_config$boe_palette[3])
+```
+
+### Brazil Inflation
+  
+```{r brazil_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("Latam"), Country %in% c("Brazil")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Brazil Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[2])
+```
+
+### Chile Inflation
+  
+```{r chile_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("Latam"), Country %in% c("Chile")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Chile Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[6])
+```
+
+### Mexico Inflation
+  
+```{r mexico_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("Latam"), Country %in% c("Mexico")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Mexico Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[3])
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curve Moves
+
+```{r LATAM_RATES, out.width= "95%", out.height= "95%"}
+
+df <- rate_table %>% dplyr::filter(Region %in% c("Latam")) %>% dplyr::select(-Region) %>% dplyr::arrange(Country)
+
+create_data_table(df, row_target = 0) %>% 
+  format_style_tables()
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Central Bank Rate Moves
+
+```{r LATAM_BANK_RATE, out.width= "95%", out.height= "95%"}
+
+df <- bank_rate_table %>% dplyr::filter(Region %in% c("Latam"))
+
+  DT::datatable(
+    df,
+    extensions = 'RowGroup',
+    options = list(
+      pageLength = 20,
+      dom = 't',
+      columnDefs = list(list(
+        visible = FALSE, targets = c(1)
+      ))
+    ),
+    rownames = FALSE
+  ) %>% 
+  format_style_bank_rate()
+
+```
+
+### Breakeven Curve Moves
+
+```{r LATAM_BREAKEVENS, out.width= "95%", out.height= "95%"}
+
+
+df <-
+  breakeven_table %>% 
+  dplyr::filter(Region %in% c("Latam")) %>% 
+  dplyr::rename("Breakeven" = "Rate") %>% 
+  dplyr::select(-Region)
+
+
+create_data_table(df) %>% 
+  format_style_tables()
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curves (local currency)
+
+```{r LATAM_CURVES, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    !grepl("USD", Country, ignore.case = T), 
+    grepl("Latam", Region, ignore.case = T)
+  )
+plot_sovereign_curves(data = df, Region = "Latam")
+
+```
+
+### Rates Decomposition (YTD)
+
+```{r}
+
+dfrd <- make_latam_decomp(data_rates %>% dplyr::filter(Region %in% c("Latam"), !grepl("USD", Country, ignore.case = T)))
+
+p <- plot_ly(data = dfrd) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Nominal") %>% dplyr::arrange(ValueYTD)),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Nominal",
+    type = "scatter",
+    mode = "markers",
+    marker = list(color = "black", width = 3)
+  ) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Real")),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Real",
+    type = "bar",
+    marker = list(color = app_config$boe_palette[1])#,
+  ) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Inflation")),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Inflation",
+    type = "bar",
+    marker = list(color = app_config$boe_palette[2])#,
+  )
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  layout(
+    xaxis = list(title = ""),
+    yaxis = list(title = "", type = "linear"),
+    margin = list(r = 50),
+    barmode = "relative",
+    legend = list(orientation = 'h')
+  )
+
+
+```   
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Spread to US Treasuries
+
+```{r LATEM_UST_SPREAD, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    Type == "Rate",
+    grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("Latam")
+  ) %>% 
+  dplyr::left_join(us_rates, by = c("Date", "Maturity")) %>% 
+  dplyr::mutate(Value = Value - Rate, Country = paste0(Country, " - ", Desc)) %>% 
+  dplyr::select(Date, Ticker, Maturity, Desc, Country, Value)
+  
+  
+p <- plotly::plot_ly(data = df)
+tickers <- df$Ticker[which(df$Maturity == 10)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p <- make_line_plot(df[which(df$Maturity == 10), ] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers <- df$Ticker[which(df$Maturity == 2)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Spread to USTs (%)') 
+
+```
+
+### Sovereign 10-year rates
+
+```{r LATEM_SERIES_10Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type %in% c("Rate", "Forward"),
+    Maturity %in% c(10),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("Latam"),
+    !grepl("USD", Country, ignore.case = T)
+  )
+
+
+p <- make_line_plot(df[df$Type == "Rate",] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers_fwd <- df[df$Type == "Forward",]$Ticker %>% unique()
+
+
+for ( i in seq_len(length(tickers_fwd)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers_fwd[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = paste(current$Country[1], " - 5y5y"),
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), 
+      visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+### Sovereign 2-year rates
+
+```{r LATEM_SERIES_2Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type == "Rate",
+    Maturity %in% c(2),
+    !grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("Latam")
+  )
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+
+
+
+LatAm FX {data-icon="fa-dollar-sign"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Exchange Rate Moves
+
+```{r LATAM_FX, out.width= "95%", out.height= "95%"}
+
+df <- ERITable %>% dplyr::filter(Region %in% c("Latam")) %>% dplyr::select(-Region)
+
+create_data_table(data = df) %>% 
+  format_style_fx()
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Exchange Rates
+
+```{r LATEM_FX, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "ERI", Type %in% c("Exchange Rate", "ERI"), Region %in% c("Latam")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Desc", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Exchange Rate Index') 
+
+```   
+
+
+### Exchange Rate Year-To-Date
+
+```{r LATEM_FX_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")), 
+    Type %in% c("Exchange Rate", "ERI"), 
+    Region %in% c("Latam")) %>%
+  dplyr::filter(Ex == "ERI") %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+    plotly_format_layout(x_title = "", y_title = 'Cumulative Change (%)') 
+
+
+```
+
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Risk Reversals
+
+```{r, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "Risk" | Type %in% c("Risk Reversal"), Region %in% c("Latam")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+ p <- plotly::plot_ly(data = df)
+
+ tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+ k <- 1
+
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k])
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+     )
+ }
+
+ p %>%
+   plotly_std_config() %>%
+   plotly_std_style() %>%
+   plotly_format_layout(x_title = "", y_title = 'Risk Reversal')
+
+
+```
+
+### Implied Vols
+
+```{r, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(Ex == "Vol" | Type %in% c("Implied Volatility"), Region %in% c("Latam")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+k <- 1
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k])
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'ATM Implied Volatility')
+
+
+```
+
+
+LatAm Economics {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### Brazil GDP (USD)
+  
+```{r brazil_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Brazil"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Brazil GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Chile GDP (USD)
+
+```{r chile_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Chile"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Chile GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### Mexico GDP (USD)
+
+```{r mexico_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Mexico"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "Mexico GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[3])
+```
+
+### Argentina GDP (USD)
+
+```{r argentina_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("Latam"), Country %in% c("Argentina"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "Argentina GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[5])
+```
+
+Column {data-width=400}
+-------------------------------------
+
+### Economics Forecasts
+
+```{r LATAM_FORECAST, out.width= "95%", out.height= "95%"}
+
+
+df <- data_forecast %>% dplyr::filter(Region %in% c("Latam")) %>% tidyr::spread(key = Year, value = Value)
+ism <- df %>% lapply(class) %>% unlist == "numeric"
+
+DT::datatable(
+  df,
+  extensions = 'RowGroup',
+  options = list(
+    pageLength = 20,
+    dom = 't',
+    rowGroup = 'Country',
+    columnDefs = list(list(
+      visible = FALSE, targets = c(0)
+    ))
+  ),
+  rownames = FALSE
+) %>%
+  formatStyle(ism,
+              color = styleInterval(0, c(
+                app_config$boe_palette[2],
+                app_config$boe_palette[5]
+              )),) %>%
+  formatStyle(0, target = 'row', lineHeight = '75%') 
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### GDP
+
+```{r LATAM_GDP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "GDP", ignore.case = T), Region %in% c("Latam")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+### Current Account Balance
+
+```{r LATAM_CA, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Current Account", ignore.case = T), Region %in% c("Latam")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Percent GDP (%)")
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Inflation
+
+```{r LATAM_INFLATION, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("Latam")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+
+### Unemployment
+
+```{r LATAM_UNEMP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Unemployment", ignore.case = T), Region %in% c("Latam")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+LatAm Equity {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Equity Moves
+
+```{r LATAM_EQUITY, out.width= "95%", out.height= "95%"}
+
+df <- EquityTable %>% dplyr::filter(Region %in% c("Latam")) %>% dplyr::select(-Region)
+
+create_data_table(df) %>%
+  format_style_fx()
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity Year-to-Date
+
+```{r LATAM_EQUITY_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")),
+    Main == "Yes" & Type == "Equity",
+    Region %in% c("Latam")) %>%
+  dplyr::filter() %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>%
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+```
+
+### Equity Indices
+
+```{r LATAM_EQUITY_I, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(Main == "Yes", Region %in% c("Latam")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>% 
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Index Level")
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity-Bond Correlations (Weekly changes in equity index (%) and 10y yield (Bps))
+
+```{r LATAM_CORR, out.width= "95%", out.height= "95%"}
+
+correlation_series <- lapply(c("Brazil", "Mexico", "Chile"), get_correlation_series, get_equity_timeseries) %>% 
+  data.table::rbindlist()
+
+p <- plotly::plot_ly(data = correlation_series)
+
+tickers <- correlation_series$country %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- correlation_series %>%
+    dplyr::filter(country == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Correlation,
+      name = current$country[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Rolling 1-month Correlation")
+
+
+```
+
+
+### Equity Volatility (30-day implied)
+
+```{r, out.width= "95%", out.height= "95%"}
+
+p <- plotly::plot_ly(data = data_equity_vol %>% dplyr::filter(Region %in% c("Latam")))
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>% 
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+
+```
+
+
+EMEA Rates {data-icon="fa-copyright"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### Turkey public debt
+  
+```{r turkey}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("Turkey"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Turkey Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Russia public debt
+
+```{r russia}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("Russia"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Russia Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### South Africa public debt
+
+```{r sa}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("South Africa"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "South Africa Debt Outstanding", icon = "-faarea-chart", color = app_config$boe_palette[3])
+```
+
+### Turkey Inflation
+  
+```{r turkey_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("EMEA"), Country %in% c("Turkey")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Turkey Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[2])
+```
+
+### Russia Inflation
+  
+```{r russia_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("EMEA"), Country %in% c("Russia")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Russia Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[6])
+```
+
+### South Africa Inflation
+  
+```{r sa_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("EMEA"), Country %in% c("South Africa")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "South Africa Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[3])
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curve Moves
+
+```{r EMEA_RATES, out.width= "95%", out.height= "95%"}
+
+df <- rate_table %>% dplyr::filter(Region %in% c("EMEA")) %>% dplyr::select(-Region) %>% dplyr::arrange(Country)
+
+create_data_table(df, row_target = 0) %>% 
+  format_style_tables()
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Central Bank Rate Moves
+
+```{r EMEA_BANK_RATE, out.width= "95%", out.height= "95%"}
+
+df <- bank_rate_table %>% dplyr::filter(Region %in% c("EMEA"))
+
+  DT::datatable(
+    df,
+    extensions = 'RowGroup',
+    options = list(
+      pageLength = 20,
+      dom = 't',
+      columnDefs = list(list(
+        visible = FALSE, targets = c(1)
+      ))
+    ),
+    rownames = FALSE
+  ) %>% 
+  format_style_bank_rate()
+
+```
+
+### Breakeven Curve Moves
+
+```{r EMEA_BREAKEVENS, out.width= "95%", out.height= "95%"}
+
+
+df <-
+  breakeven_table %>% 
+  dplyr::filter(Region %in% c("EMEA")) %>% 
+  dplyr::rename("Breakeven" = "Rate") %>% 
+  dplyr::select(-Region)
+
+
+create_data_table(df) %>% 
+  format_style_tables()
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curves (local currency)
+
+```{r EMEA_CURVES, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    !grepl("USD", Country, ignore.case = T), 
+    grepl("EMEA", Region, ignore.case = T)
+  )
+
+plot_sovereign_curves(data = df, Region = "EMEA")
+
+
+```
+
+### Rates Decomposition (YTD)
+
+```{r}
+
+dfrd <- make_emea_decomp(data_rates %>% dplyr::filter(Region %in% c("EMEA"), !grepl("USD", Country, ignore.case = T)))
+
+p <- plot_ly(data = dfrd) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Nominal") %>% dplyr::arrange(ValueYTD)),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Nominal",
+    type = "scatter",
+    mode = "markers",
+    marker = list(color = "black", width = 3)
+  ) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Real")),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Real",
+    type = "bar",
+    marker = list(color = app_config$boe_palette[1])#,
+  ) %>%
+  add_trace(
+    data = (dfrd %>% filter(Type == "Inflation")),
+    x = ~Country,
+    y = ~ValueYTD,
+    name = "Inflation",
+    type = "bar",
+    marker = list(color = app_config$boe_palette[2])#,
+  )
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  layout(
+    xaxis = list(title = ""),
+    yaxis = list(title = "", type = "linear"),
+    margin = list(r = 50),
+    barmode = "relative",
+    legend = list(orientation = 'h')
+  )
+
+
+```   
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Spread to US Treasuries
+
+```{r EMEA_UST_SPREAD, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    Type == "Rate",
+    grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("EMEA")
+  ) %>% 
+  dplyr::left_join(us_rates, by = c("Date", "Maturity")) %>% 
+  dplyr::mutate(Value = Value - Rate, Country = paste0(Country, " - ", Desc)) %>% 
+  dplyr::select(Date, Ticker, Maturity, Desc, Country, Value)
+  
+  
+p <- plotly::plot_ly(data = df)
+tickers <- df$Ticker[which(df$Maturity == 10)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p <- make_line_plot(df[which(df$Maturity == 10), ] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers <- df$Ticker[which(df$Maturity == 2)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Spread to USTs (%)') 
+
+```
+
+### Sovereign 10-year rates
+
+```{r EMEA_SERIES_10Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type %in% c("Rate", "Forward"),
+    Maturity %in% c(10),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("EMEA"),
+    !grepl("USD", Country, ignore.case = T)
+  )
+
+
+p <- make_line_plot(df[df$Type == "Rate",] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers_fwd <- df[df$Type == "Forward",]$Ticker %>% unique()
+
+
+for ( i in seq_len(length(tickers_fwd)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers_fwd[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = paste(current$Country[1], " - 5y5y"),
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), 
+      visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+### Sovereign 2-year rates
+
+```{r EMEA_SERIES_2Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type == "Rate",
+    Maturity %in% c(2),
+    !grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("EMEA")
+  )
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+
+
+EMEA FX {data-icon="fa-dollar-sign"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Exchange Rate Moves
+
+```{r EMEA_FX_DT, out.width= "95%", out.height= "95%"}
+
+df <- ERITable %>% dplyr::filter(Region %in% c("EMEA")) %>% dplyr::select(-Region)
+
+create_data_table(data = df) %>% 
+  format_style_fx()
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Exchange Rates
+
+```{r EMEA_FX, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "ERI", Type %in% c("Exchange Rate", "ERI"), Region %in% c("EMEA")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Desc", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Exchange Rate Index') 
+
+```   
+
+### Exchange Rate Year-To-Date
+
+```{r EMEA_FX_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(    
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")), 
+    Type %in% c("Exchange Rate", "ERI"), 
+    Region %in% c("EMEA")) %>%
+  dplyr::filter(Ex == "ERI") %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+    plotly_format_layout(x_title = "", y_title = 'Cumulative Change (%)') 
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Risk Reversals
+
+```{r, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "Risk" | Type %in% c("Risk Reversal"), Region %in% c("EMEA")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+ p <- plotly::plot_ly(data = df)
+
+ tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+ k <- 1
+
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k])
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+     )
+ }
+
+ p %>%
+   plotly_std_config() %>%
+   plotly_std_style() %>%
+   plotly_format_layout(x_title = "", y_title = 'Risk Reversal')
+
+
+```
+
+### Implied Vols
+
+```{r, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(Ex == "Vol" | Type %in% c("Implied Volatility"), Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+k <- 1
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k])
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'ATM Implied Volatility')
+
+
+```
+
+
+EMEA Economics {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### Turkey GDP (USD)
+  
+```{r turkey_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("Turkey"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Turkey GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Russia GDP (USD)
+
+```{r russia_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("Russia"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Russia GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### South Africa GDP (USD)
+
+```{r sa_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("EMEA"), Country %in% c("South Africa"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "South Africa GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[3])
+```
+
+
+Column {data-width=400}
+-------------------------------------
+
+### Economics Forecasts
+
+```{r EMEA_FORECAST, out.width= "95%", out.height= "95%"}
+
+
+df <- data_forecast %>% dplyr::filter(Region %in% c("EMEA")) %>% tidyr::spread(key = Year, value = Value)
+ism <- df %>% lapply(class) %>% unlist == "numeric"
+
+DT::datatable(
+  df,
+  extensions = 'RowGroup',
+  options = list(
+    pageLength = 20,
+    dom = 't',
+    rowGroup = 'Country',
+    columnDefs = list(list(
+      visible = FALSE, targets = c(0)
+    ))
+  ),
+  rownames = FALSE
+) %>%
+  formatStyle(ism,
+              color = styleInterval(0, c(
+                app_config$boe_palette[2],
+                app_config$boe_palette[5]
+              )),) %>%
+  formatStyle(0, target = 'row', lineHeight = '75%') 
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### GDP
+
+```{r EMEA_GDP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "GDP", ignore.case = T), Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+### Current Account Balance
+
+```{r EMEA_CA, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Current Account", ignore.case = T), Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Percent GDP (%)")
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Inflation
+
+```{r EMEA_INFLATION, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+
+### Unemployment
+
+```{r EMEA_UNEMP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Unemployment", ignore.case = T), Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+EMEA Equity {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Equity Moves
+
+```{r EMEA_EQUITY, out.width= "95%", out.height= "95%"}
+
+df <- EquityTable %>% dplyr::filter(Region %in% c("EMEA")) %>% dplyr::select(-Region)
+
+create_data_table(df) %>%
+  format_style_fx()
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity Year-to-Date
+
+```{r EMEA_EQUITY_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")),
+    Main == "Yes" & Type == "Equity",
+    Region %in% c("EMEA")) %>%
+  dplyr::filter() %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>%
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+```
+
+### Equity Indices
+
+```{r EMEA_EQUITY_I, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(Main == "Yes", Region %in% c("EMEA")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>% 
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Index Level")
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity-Bond Correlations (Weekly changes in equity index (%) and 10y yield (Bps))
+
+```{r EMEA_CORR, out.width= "95%", out.height= "95%"}
+
+correlation_series <- lapply(c("Russia", "Turkey", "South Africa"), get_correlation_series, get_equity_timeseries) %>% 
+  data.table::rbindlist()
+
+p <- plotly::plot_ly(data = correlation_series)
+
+tickers <- correlation_series$country %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- correlation_series %>%
+    dplyr::filter(country == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Correlation,
+      name = current$country[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Rolling 1-month Correlation")
+
+
+```
+
+
+### Equity Volatility (30-day implied)
+
+```{r, out.width= "95%", out.height= "95%"}
+
+p <- plotly::plot_ly(data = data_equity_vol %>% dplyr::filter(Region %in% c("EMEA")))
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+
+```
+
+
+
+APAC Rates {data-icon="fa-copyright"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### India public debt
+  
+```{r india}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("India"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "India Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Indonesia public debt
+
+```{r indonesia}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Indonesia"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Indonesia Debt Outstanding", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### Thailand public debt
+
+```{r thailand}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Thailand"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "Thailand Debt Outstanding", icon = "-faarea-chart", color = app_config$boe_palette[3])
+```
+
+### South Korea public debt
+
+```{r korea}
+
+df <- rates_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Korea"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "South Korea Debt Outstanding", icon = "-faarea-chart", color = app_config$boe_palette[3])
+```
+
+### India Inflation
+  
+```{r india_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("APAC"), Country %in% c("India")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "India Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[2])
+```
+
+### Indondesia Inflation
+  
+```{r indondesia_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("APAC"), Country %in% c("Indondesia")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Indondesia Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[2])
+```
+
+
+### Thailand Inflation
+  
+```{r thailand_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("APAC"), Country %in% c("Thailand")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "Thailand Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[6])
+```
+
+### South Korea Inflation
+  
+```{r sk_inflation}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("APAC"), Country %in% c("Korea")) %>%
+  dplyr::arrange(desc(Date)) %>% 
+  head(1) %>% 
+  dplyr::pull(Value)
+
+valueBox(paste0(round(df,2), "%"), caption = "South Korea Inflation", icon = "fa-dollar-sign", color = app_config$boe_palette[3])
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curve Moves
+
+```{r APAC_RATES, out.width= "95%", out.height= "95%"}
+
+df <- rate_table %>% dplyr::filter(Region %in% c("APAC")) %>% dplyr::select(-Region) %>% dplyr::arrange(Country)
+
+create_data_table(df, row_target = 0) %>% 
+  format_style_tables()
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Central Bank Rate Moves
+
+```{r APAC_BANK_RATE, out.width= "95%", out.height= "95%"}
+
+df <- bank_rate_table %>% dplyr::filter(Region %in% c("APAC"))
+
+  DT::datatable(
+    df,
+    extensions = 'RowGroup',
+    options = list(
+      pageLength = 20,
+      dom = 't',
+      columnDefs = list(list(
+        visible = FALSE, targets = c(1)
+      ))
+    ),
+    rownames = FALSE
+  ) %>% 
+  format_style_bank_rate()
+
+```
+
+### Breakeven Curve Moves
+
+```{r APAC_BREAKEVENS, out.width= "95%", out.height= "95%"}
+
+
+df <-
+  breakeven_table %>% 
+  dplyr::filter(Region %in% c("APAC")) %>% 
+  dplyr::rename("Breakeven" = "Rate") %>% 
+  dplyr::select(-Region)
+
+
+create_data_table(df) %>% 
+  format_style_tables()
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Sovereign Curves (local currency)
+
+```{r APAC_CURVES, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    !grepl("USD", Country, ignore.case = T), 
+    grepl("APAC", Region, ignore.case = T)
+  )
+
+plot_sovereign_curves(data = df, Region = "APAC")
+
+
+```
+
+### Rates Decomposition (YTD)
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Spread to US Treasuries
+
+```{r APAC_UST_SPREAD, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>% 
+  dplyr::filter(
+    Type == "Rate",
+    grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("APAC")
+  ) %>% 
+  dplyr::left_join(us_rates, by = c("Date", "Maturity")) %>% 
+  dplyr::mutate(Value = Value - Rate, Country = paste0(Country, " - ", Desc)) %>% 
+  dplyr::select(Date, Ticker, Maturity, Desc, Country, Value)
+  
+  
+p <- plotly::plot_ly(data = df)
+tickers <- df$Ticker[which(df$Maturity == 10)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p <- make_line_plot(df[which(df$Maturity == 10), ] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers <- df$Ticker[which(df$Maturity == 2)] %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Country[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Spread to USTs (%)') 
+
+```
+
+### Sovereign 10-year rates
+
+```{r APAC_SERIES_10Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type %in% c("Rate", "Forward"),
+    Maturity %in% c(10),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("APAC"),
+    !grepl("USD", Country, ignore.case = T)
+  )
+
+
+p <- make_line_plot(df[df$Type == "Rate",] , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+tickers_fwd <- df[df$Type == "Forward",]$Ticker %>% unique()
+
+
+for ( i in seq_len(length(tickers_fwd)) ) {
+  
+  current <- df %>%
+    dplyr::filter(Ticker == tickers_fwd[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = paste(current$Country[1], " - 5y5y"),
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i+3]), 
+      visible = "legendonly"
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+### Sovereign 2-year rates
+
+```{r APAC_SERIES_2Y, out.width= "95%", out.height= "95%"}
+
+df <- get_rate_timeseries %>%
+  dplyr::filter(
+    Type == "Rate",
+    Maturity %in% c(2),
+    !grepl("USD", Country, ignore.case = T),
+    !grepl("Bank Rate", Desc, ignore.case = T),
+    Region %in% c("APAC")
+  )
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Country", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Yield (%)') 
+
+
+```
+
+
+
+APAC FX {data-icon="fa-dollar-sign"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Exchange Rate Moves
+
+```{r APAC_FX_DT, out.width= "95%", out.height= "95%"}
+
+df <- ERITable %>% dplyr::filter(Region %in% c("APAC")) %>% dplyr::select(-Region)
+
+create_data_table(data = df) %>% 
+  format_style_fx()
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Exchange Rates
+
+```{r APAC_FX, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "ERI", Type %in% c("Exchange Rate", "ERI"), Region %in% c("APAC")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- make_line_plot(df , xlab = "Date", ylab = "Value", fill = "Ticker", name = "Desc", visible = NULL)
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'Exchange Rate Index') 
+
+```   
+
+### Exchange Rate Year-To-Date
+
+```{r APAC_FX_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(    
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")), 
+    Type %in% c("Exchange Rate", "ERI"), 
+    Region %in% c("APAC")) %>%
+  dplyr::filter(Ex == "ERI") %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100) %>% 
+    dplyr::distinct(Date, Value, .keep_all = T)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+    plotly_format_layout(x_title = "", y_title = 'Cumulative Change (%)') 
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Risk Reversals
+
+```{r, out.width= "95%", out.height= "95%"}
+
+ df <- get_fx_timeseries %>%
+   dplyr::filter(Ex == "Risk" | Type %in% c("Risk Reversal"), Region %in% c("APAC")) %>%
+   dplyr::select(Date, Country, Ticker, Desc, Value)
+
+ p <- plotly::plot_ly(data = df)
+
+ tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+ k <- 1
+
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k])
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+     )
+ }
+
+ tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+ for ( i in seq_len(length(tickers)) ) {
+
+   k <- k + 1
+
+   current <- df %>%
+     dplyr::filter(Ticker == tickers[i])
+
+   p <- p %>%
+     add_trace(
+       x = current$Date,
+       y = current$Value,
+       name = current$Desc[1],
+       type = "scatter",
+       mode = "lines",
+       line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+     )
+ }
+
+ p %>%
+   plotly_std_config() %>%
+   plotly_std_style() %>%
+   plotly_format_layout(x_title = "", y_title = 'Risk Reversal')
+
+
+```
+
+### Implied Vols
+
+```{r, out.width= "95%", out.height= "95%"}
+
+df <- get_fx_timeseries %>%
+  dplyr::filter(Ex == "Vol" | Type %in% c("Implied Volatility"), Region %in% c("APAC")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value)
+
+p <- plot_ly(data = df)
+
+tickers <- grep(x = df$Ticker, pattern = "3M", ignore.case = T, value = T) %>% unique()
+k <- 1
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k])
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1M", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]),  visible = 'legendonly'
+    )
+}
+
+tickers <- grep(x = df$Ticker, pattern = "1Y", ignore.case = T, value = T) %>% unique()
+
+
+for ( i in seq_len(length(tickers)) ) {
+
+  k <- k + 1
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[k]), visible = 'legendonly'
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_std_style() %>%
+  plotly_format_layout(x_title = "", y_title = 'ATM Implied Volatility')
+
+
+```
+
+
+APAC Economics {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=100}
+-------------------------------------
+  
+### India GDP (USD)
+  
+```{r india_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("India"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "India GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[2])
+```
+
+
+### Indonesia GDP (USD)
+
+```{r indonesia_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Indonesia"))
+valueBox(paste0(round(df$Value,0), "bn"), caption = "Indonesia GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[6])
+```
+
+
+### South Korea GDP (USD)
+
+```{r sk_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Korea"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "South Korea GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[3])
+```
+
+### Thailand GDP (USD)
+
+```{r thailand_gdp}
+
+df <- econ_summary %>% dplyr::filter(Region %in% c("APAC"), Country %in% c("Thailand"))
+valueBox(paste0(round(df$Value, 0), "bn"), caption = "Thailand GDP (USD)", icon = "fa-area-chart", color = app_config$boe_palette[3])
+```
+
+
+
+Column {data-width=400}
+-------------------------------------
+
+### Economics Forecasts
+
+```{r APAC_FORECAST, out.width= "95%", out.height= "95%"}
+
+
+df <- data_forecast %>% 
+  dplyr::filter(Region %in% c("APAC")) %>% 
+  dplyr::distinct() %>% 
+  tidyr::spread(key = Year, value = Value)
+
+ism <- df %>% lapply(class) %>% unlist == "numeric"
+
+DT::datatable(
+  df,
+  extensions = 'RowGroup',
+  options = list(
+    pageLength = 20,
+    dom = 't',
+    rowGroup = 'Country',
+    columnDefs = list(list(
+      visible = FALSE, targets = c(0)
+    ))
+  ),
+  rownames = FALSE
+) %>%
+  formatStyle(ism,
+              color = styleInterval(0, c(
+                app_config$boe_palette[2],
+                app_config$boe_palette[5]
+              )),) %>%
+  formatStyle(0, target = 'row', lineHeight = '75%') 
+
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### GDP
+
+```{r APAC_GDP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "GDP", ignore.case = T), Region %in% c("APAC")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+### Current Account Balance
+
+```{r APAC_CA, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Current Account", ignore.case = T), Region %in% c("APAC")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Percent GDP (%)")
+
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Inflation
+
+```{r APAC_INFLATION, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "CPI", ignore.case = T), Region %in% c("APAC")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+
+### Unemployment
+
+```{r APAC_UNEMP, out.width= "95%", out.height= "95%"}
+
+df <- data_economy %>%
+  dplyr::filter(grepl(x = Desc, pattern = "Unemployment", ignore.case = T), Region %in% c("APAC")) %>%
+  dplyr::select(Date, Ticker, Desc, Value, Country)
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Year-on-Year (%)")
+
+
+```
+
+APAC Equity {data-icon="fa-chart-bar"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Equity Moves
+
+```{r APAC_EQUITY, out.width= "95%", out.height= "95%"}
+
+df <- EquityTable %>% dplyr::filter(Region %in% c("APAC")) %>% dplyr::select(-Region)
+
+create_data_table(df) %>%
+  format_style_fx()
+
+```
+
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity Year-to-Date
+
+```{r APAC_EQUITY_YTD, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(
+    Date >= as.Date(paste0(year(Sys.Date()) - 1, "-12-31")),
+    Main == "Yes" & Type == "Equity",
+    Region %in% c("APAC")) %>%
+  dplyr::filter() %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>%
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i]) %>%
+    dplyr::mutate(Valuecum = (Value/Value[1]-1)*100)
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Valuecum,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+```
+
+### Equity Indices
+
+```{r APAC_EQUITY_I, out.width= "95%", out.height= "95%"}
+
+df <- get_equity_timeseries %>%
+  dplyr::filter(Main == "Yes", Region %in% c("APAC")) %>%
+  dplyr::select(Date, Country, Ticker, Desc, Value) %>% 
+  dplyr::mutate(Desc = paste0(Country, " - ", Desc))
+
+p <- plotly::plot_ly(data = df)
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Index Level")
+
+```
+
+Column {data-width=300}
+-------------------------------------
+
+### Equity-Bond Correlations (Weekly changes in equity index (%) and 10y yield (Bps))
+
+```{r APAC_CORR, out.width= "95%", out.height= "95%"}
+
+correlation_series <- lapply(c("India", "Indonesia", "Thailand"), get_correlation_series, get_equity_timeseries) %>% 
+  data.table::rbindlist()
+
+p <- plotly::plot_ly(data = correlation_series)
+
+tickers <- correlation_series$country %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+  
+  current <- correlation_series %>%
+    dplyr::filter(country == tickers[i])
+  
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Correlation,
+      name = current$country[1],
+      type = "scatter",
+      mode = "lines+markers",
+      line = list(color = app_config$boe_palette[i]),
+      marker = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", y_title = "Rolling 1-month Correlation")
+
+
+
+```
+
+
+### Equity Volatility (30-day implied)
+
+```{r, out.width= "95%", out.height= "95%"}
+
+p <- plotly::plot_ly(data = data_equity_vol %>% dplyr::filter(Region %in% c("APAC")))
+
+tickers <- df$Ticker %>% unique()
+
+for ( i in seq_len(length(tickers)) ) {
+
+  current <- df %>%
+    dplyr::filter(Ticker == tickers[i])
+
+  p <- p %>%
+    add_trace(
+      x = current$Date,
+      y = current$Value,
+      name = current$Desc[1],
+      type = "scatter",
+      mode = "lines",
+      line = list(color = app_config$boe_palette[i])
+    )
+}
+
+p %>%
+  layout(legend = list(orientation = 'h')) %>% 
+  plotly_std_config() %>%
+  plotly_format_layout(x_title = "", "Cumulative Change (%)")
+
+
+
+```
+
+
+EM News Feed {data-icon="fa-newspaper"}
+=====================================  
+
+Column {data-width=400}
+-------------------------------------
+
+### Financial Times
+
+```{r FT, out.width= "95%", out.height= "95%"}
+
+
+
+DT::datatable(
+  feedFT[, 1:5],
+  escape = FALSE,
+  rownames = FALSE,
+  options = list(
+    pageLength = 20,
+    paging = TRUE,
+    lengthMenu = list(c(15, 25, 50, -1),
+                      list("15", "25", "50", "All")),
+    rowGroup = "month",
+    scrollX = T,
+    columnDefs = list(list(
+      visible = FALSE, targets = c(0)
+    )),
+    # js to remove datatable headers
+    initComplete = JS(
+      "function(settings, json) {",
+      "$(this.api().table().header()).css({'background-color': 'white', 'color': '#800000'});$('body').css({'font-family': 'Calibri'});",
+      "}"
+    )
+  )
+) 
+
+```
+
+
+Column {data-width=400}
+-------------------------------------
+
+### Google News
+
+```{r GOOGLE, out.width= "95%", out.height= "95%"}
+
+DT::datatable(
+  feedEM[, 1:5],
+  escape = FALSE,
+  rownames = FALSE,
+  options = list(
+    pageLength = 20,
+    paging = TRUE,
+    lengthMenu = list(c(15, 25, 50, -1),
+                      list("15", "25", "50", "All")),
+    rowGroup = "month",
+    scrollX = T,
+    columnDefs = list(list(
+      visible = FALSE, targets = c(0)
+    )),
+    # js to remove datatable headers
+    initComplete = JS(
+      "function(settings, json) {",
+      "$(this.api().table().header()).css({'background-color': 'white', 'color': '#800000'});$('body').css({'font-family': 'Calibri'});",
+      "}"
+    )
+  )
+)
+
+```
+
